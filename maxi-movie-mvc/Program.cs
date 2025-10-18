@@ -1,7 +1,19 @@
+using maxi_movie_mvc.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+//incluir dbcontext
+builder.Services.AddDbContext<MovieDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MovieDbContext")));
+
+
+
+
 
 var app = builder.Build();
 
