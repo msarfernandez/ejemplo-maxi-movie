@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tablaPeliculas">
     <thead>
         <tr>
             <th>
@@ -51,3 +51,21 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#tablaPeliculas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                },
+                columnDefs: [
+                    { orderable: false, targets: [0, 4] } // Deshabilitar ordenamiento en columnas Imagen y Acciones
+                ],
+                pageLength: 5,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
+                order: [[1, 'asc']] // Ordenar por Título por defecto
+            });
+        });
+    </script>
+}

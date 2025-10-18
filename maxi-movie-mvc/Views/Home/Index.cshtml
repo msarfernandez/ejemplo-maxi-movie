@@ -1,8 +1,67 @@
-﻿@{
+﻿@model List<Pelicula>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<main class="flex-grow-1">
+    <div class="container py-4">
+        <div class="row g-3 mb-4 align-items-center">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-text"><span class="material-symbols-outlined">search</span></span>
+                    <input class="form-control form-control-lg" placeholder="Buscar películas..." type="text" />
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex flex-wrap gap-2 justify-content-lg-end">
+                <div class="dropdown">
+                    <button aria-expanded="false" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"> Género </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Acción</a></li>
+                        <li><a class="dropdown-item" href="#">Comedia</a></li>
+                        <li><a class="dropdown-item" href="#">Drama</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button aria-expanded="false" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"> Plataforma </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Netflix</a></li>
+                        <li><a class="dropdown-item" href="#">Disney+</a></li>
+                        <li><a class="dropdown-item" href="#">HBO Max</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button aria-expanded="false" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"> Calificación </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">5 estrellas</a></li>
+                        <li><a class="dropdown-item" href="#">4 estrellas o más</a></li>
+                        <li><a class="dropdown-item" href="#">3 estrellas o más</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary" type="button"><span class="material-symbols-outlined align-middle">grid_view</span></button>
+                    <button class="btn btn-outline-secondary" type="button"><span class="material-symbols-outlined align-middle">view_list</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4">
+
+            @foreach (var pelicula in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm">
+                    <div class="position-relative">
+                        <img alt="@pelicula.Titulo" class="card-img-top" src="@pelicula.PosterUrlPortada" />
+                    </div>
+                    <div class="card-body p-2">
+                        <h5 class="card-title fs-6 fw-semibold mb-1">@pelicula.Titulo</h5>
+                        <div class="d-flex align-items-center text-muted small">
+                            <span class="material-symbols-outlined text-warning me-1" style="font-size: 1rem;"> star </span>
+                            <span>4.5</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</main>

@@ -29,3 +29,22 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Mejoras adicionales para modo oscuro */
+[data-bs-theme="dark"] .footer {
+  background-color: #212529;
+}
+
+/* Estilos para las tarjetas de películas en modo oscuro */
+[data-bs-theme="dark"] .card {
+  background-color: #495057 !important;
+  border-color: #6c757d !important;
+}
+
+[data-bs-theme="dark"] .card-title {
+  color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .card-body .text-muted {
+  color: #dee2e6 !important;
+}
