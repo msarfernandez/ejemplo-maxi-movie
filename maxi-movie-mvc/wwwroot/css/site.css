@@ -48,3 +48,57 @@ body {
 [data-bs-theme="dark"] .card-body .text-muted {
   color: #dee2e6 !important;
 }
+
+/* Estilos para el select de género para que coincida con los botones dropdown */
+.form-select.btn-outline-secondary,
+.form-select-lg.btn-outline-secondary {
+  border: 1px solid #6c757d;
+  background-color: transparent;
+  color: #6c757d;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+/* Tamaño grande específico */
+.form-select-lg.btn-outline-secondary {
+  min-width: 150px;
+  height: auto;
+}
+
+[data-bs-theme="dark"] .form-select.btn-outline-secondary,
+[data-bs-theme="dark"] .form-select-lg.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #dee2e6;
+  background-color: transparent;
+}
+
+[data-bs-theme="dark"] .form-select.btn-outline-secondary option,
+[data-bs-theme="dark"] .form-select-lg.btn-outline-secondary option {
+  background-color: #212529;
+  color: #dee2e6;
+}
+
+.form-select.btn-outline-secondary:hover,
+.form-select-lg.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: #fff;
+  border-color: #6c757d;
+}
+
+[data-bs-theme="dark"] .form-select.btn-outline-secondary:hover,
+[data-bs-theme="dark"] .form-select-lg.btn-outline-secondary:hover {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.form-select.btn-outline-secondary:focus,
+.form-select-lg.btn-outline-secondary:focus {
+  border-color: #6c757d;
+  box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25);
+  background-color: transparent;
+}
+
+[data-bs-theme="dark"] .form-select.btn-outline-secondary:focus,
+[data-bs-theme="dark"] .form-select-lg.btn-outline-secondary:focus {
+  color: #dee2e6;
+}

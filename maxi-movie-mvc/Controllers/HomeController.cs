@@ -2,6 +2,7 @@ using System.Diagnostics;
 using maxi_movie_mvc.Data;
 using maxi_movie_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace maxi_movie_mvc.Controllers
@@ -18,7 +19,7 @@ namespace maxi_movie_mvc.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "")
+        public async Task<IActionResult> Index(int pagina = 1, string txtBusqueda = "", int generoId = 0)
         {
             if (pagina < 1) pagina = 1;
 
@@ -26,6 +27,11 @@ namespace maxi_movie_mvc.Controllers
             if(!string.IsNullOrEmpty(txtBusqueda))
             {
                 consulta = consulta.Where(p => p.Titulo.Contains(txtBusqueda));
+            }
+
+            if(generoId > 0)
+            {
+                consulta = consulta.Where(p => p.GeneroId == generoId);
             }
 
             var totalPeliculas = await consulta.CountAsync();
@@ -43,7 +49,24 @@ namespace maxi_movie_mvc.Controllers
             ViewBag.TotalPeliculas = totalPeliculas;
             ViewBag.TxtBusqueda = txtBusqueda;
 
+            var generos = await _context.Generos.OrderBy(g => g.Descripcion).ToListAsync();
+            generos.Insert(0, new Genero { Id = 0, Descripcion = "Género" });
+            ViewBag.GeneroId = new SelectList(
+                generos,
+                "Id",
+                "Descripcion",
+                generoId
+            );
+
             return View(peliculas);
+        }
+
+        public async Task<IActionResult> Details(int Id)
+        {
+            var pelicula = await _context.Peliculas
+                .Include(p => p.Genero)
+                .FirstOrDefaultAsync(p => p.Id == Id);
+            return View(pelicula);
         }
 
         public IActionResult Privacy()
