@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace maxi_movie_mvc.Controllers
 {
@@ -11,15 +12,21 @@ namespace maxi_movie_mvc.Controllers
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly MovieDbContext _context;
-        public ReviewController(UserManager<Usuario>userManager, MovieDbContext context)
+        public ReviewController(UserManager<Usuario> userManager, MovieDbContext context)
         {
             _userManager = userManager;
             _context = context;
         }
         // GET: ReviewController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var userId = _userManager.GetUserId(User);
+            var reviews = await _context.Reviews
+                .Include(r => r.Pelicula)
+                .Where(r => r.UsuarioId == userId)
+                .ToListAsync();
+
+            return View(reviews);
         }
 
         // GET: ReviewController/Details/5
@@ -79,23 +86,63 @@ namespace maxi_movie_mvc.Controllers
         }
 
         // GET: ReviewController/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
-            return View();
+
+            var review = _context.Reviews
+                .Include(r => r.Pelicula)
+                .FirstOrDefault(r => r.Id == id);
+            if (review == null)
+                return NotFound();
+
+            var userId = _userManager.GetUserId(User);
+            if (review.UsuarioId != userId)
+                return Forbid();
+
+            var reviewViewModel = new ReviewCreateViewModel
+            {
+                Id = review.Id,
+                PeliculaId = review.PeliculaId,
+                UsuarioId = review.UsuarioId,
+                Rating = review.Rating,
+                Comentario = review.Comentario,
+                PeliculaTitulo = review.Pelicula?.Titulo
+            };
+
+            return View(reviewViewModel);
         }
 
         // POST: ReviewController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(ReviewCreateViewModel review)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if(ModelState.IsValid)
+                {
+                    var reviewExistente = _context.Reviews.FirstOrDefault(r => r.Id == review.Id);
+                    if (reviewExistente == null)
+                        return NotFound();
+
+                    var userId = _userManager.GetUserId(User);
+                    if (reviewExistente.UsuarioId != userId)
+                        return Forbid();
+
+                    reviewExistente.Rating = review.Rating;
+                    reviewExistente.Comentario = review.Comentario;
+                    _context.Reviews.Update(reviewExistente);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index", "Review");
+                }
+
+
+                return View(review);
             }
             catch
             {
-                return View();
+                return View(review);
             }
         }
 
