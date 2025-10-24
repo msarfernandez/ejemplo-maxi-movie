@@ -11,11 +11,13 @@ namespace maxi_movie_mvc.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ImagenStorage _imagenStorage;    
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage)
+        private readonly IEmailService _emailService;
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ImagenStorage imagenStorage, IEmailService emailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _imagenStorage = imagenStorage;
+            _emailService = emailService;
         }
         public IActionResult Login()
         {
@@ -65,6 +67,7 @@ namespace maxi_movie_mvc.Controllers
                 if (resultado.Succeeded)
                 {
                     await _signInManager.SignInAsync(nuevoUsuario, isPersistent: false);
+                    await _emailService.SendAsync(nuevoUsuario.Email, "Bienvenido a Maxi Movie", "<h1>Gracias por registrarte en Maxi Movie!</h1><p>Esperamos que disfrutes de nuestra plataforma.</p>");
                     return RedirectToAction("Index", "Home");
                 }
                 else
