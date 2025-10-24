@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using maxi_movie_mvc.Data;
 using maxi_movie_mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace maxi_movie_mvc.Controllers
 {
+    [Authorize (Roles = "Admin")]
     public class PeliculaController : Controller
     {
         private readonly MovieDbContext _context;

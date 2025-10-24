@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using maxi_movie_mvc.Data;
+using maxi_movie_mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using maxi_movie_mvc.Data;
-using maxi_movie_mvc.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace maxi_movie_mvc.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class GeneroController : Controller
     {
         private readonly MovieDbContext _context;

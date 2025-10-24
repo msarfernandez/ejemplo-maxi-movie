@@ -18,7 +18,7 @@ namespace maxi_movie_mvc.Controllers
             _context = context;
         }
         // GET: ReviewController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index()//Mis Reviews
         {
             var userId = _userManager.GetUserId(User);
             var reviews = await _context.Reviews
@@ -87,7 +87,7 @@ namespace maxi_movie_mvc.Controllers
 
         // GET: ReviewController/Edit/5
         [Authorize]
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
 
             var review = _context.Reviews
@@ -96,8 +96,8 @@ namespace maxi_movie_mvc.Controllers
             if (review == null)
                 return NotFound();
 
-            var userId = _userManager.GetUserId(User);
-            if (review.UsuarioId != userId)
+            var user = await _userManager.GetUserAsync(User);
+            if (review.UsuarioId != user.Id && !_userManager.IsInRoleAsync(user, "Admin").Result)
                 return Forbid();
 
             var reviewViewModel = new ReviewCreateViewModel
@@ -116,7 +116,7 @@ namespace maxi_movie_mvc.Controllers
         // POST: ReviewController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ReviewCreateViewModel review)
+        public async Task<ActionResult> Edit(ReviewCreateViewModel review)
         {
             try
             {
@@ -126,8 +126,8 @@ namespace maxi_movie_mvc.Controllers
                     if (reviewExistente == null)
                         return NotFound();
 
-                    var userId = _userManager.GetUserId(User);
-                    if (reviewExistente.UsuarioId != userId)
+                    var user = await _userManager.GetUserAsync(User);
+                    if (review.UsuarioId != user.Id && !_userManager.IsInRoleAsync(user, "Admin").Result)
                         return Forbid();
 
                     reviewExistente.Rating = review.Rating;
